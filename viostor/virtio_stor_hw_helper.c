@@ -780,10 +780,10 @@ VOID VioStorVQLock(IN PVOID DeviceExtension, IN ULONG MessageID, IN OUT PSTOR_LO
         {
             if (adaptExt->num_queues > 1)
             {
+                ULONG QueueNumber = (MessageID - 1) % adaptExt->num_queues;
 
-                NT_ASSERT(MessageID > 0);
-                NT_ASSERT(MessageID <= adaptExt->num_queues);
-                StorPortAcquireSpinLock(DeviceExtension, DpcLock, &adaptExt->dpc[MessageID - 1], LockHandle);
+                NT_ASSERT(QueueNumber < adaptExt->num_queues);
+                StorPortAcquireSpinLock(DeviceExtension, DpcLock, &adaptExt->dpc[QueueNumber], LockHandle);
             }
             else
             {
